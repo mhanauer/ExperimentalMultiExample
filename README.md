@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Trying a multilevel modeling approach
+Multilevel approach for GORTRateAge
 ```{r}
 setwd("~/Desktop")
 readData = read.csv("TheCrossingDataSet.csv")
@@ -28,7 +28,7 @@ readDataSubLong$Group = factor(readDataSubLong$Group)
 readMuliModel = groupedData(PREGORTRateAge ~ Group*time | id, data = readDataSubLong)
 
 
-readMuliModelResults = lme(PREGORTRateAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREGORTRateAge ~ time*Group, random =~ 1 | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
 ranef(readMuliModelResults)
 ```
@@ -49,9 +49,8 @@ head(readDataSubLong)
 readMuliModel = groupedData(PREGORTAccuracyAge ~ Group*time | id, data = readDataSubLong)
 
 
-readMuliModelResults = lme(PREGORTAccuracyAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREGORTAccuracyAge ~ time*Group, random =~ 1 | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
-ranef(readMuliModelResults)
 ```
 GORT fluency reading age
 ```{r}
@@ -70,17 +69,16 @@ head(readDataSubLong)
 readMuliModel = groupedData(PREGORTFluencyAge ~ Group*time | id, data = readDataSubLong)
 
 
-readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random=~ 1 | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
-
 ```
 BURT reading age
 ```{r}
-readDataBURT = readData[c("id","Group", "PREBURTReadingAge", "PREBURTReadingAge")]
+readDataBURT = readData[c("id","Group", "PREBURTReadingAge", "POSTBURTReadingAge")]
 
 readData$PREBURTReadingAge
 # First get into the format of the first wide transformation.
-readDataSubLong = reshape(readDataGORTFl, varying = list(c("PREGORTFluencyAge", "POSTGORTFluencyAge")), times = c(1,2), direction = "long")
+readDataSubLong = reshape(readDataBURT, varying = list(c("PREBURTReadingAge", "POSTBURTReadingAge")), times = c(1,2), direction = "long")
 
 library(nlme)
 readDataSubLong$Group = factor(readDataSubLong$Group)
@@ -88,9 +86,11 @@ readDataSubLong$time = factor(readDataSubLong$time)
 readDataSubLong$id = factor(readDataSubLong$id)
 head(readDataSubLong)
 
-readMuliModel = groupedData(PREGORTFluencyAge ~ Group*time | id, data = readDataSubLong)
+
+readMuliModel = groupedData(PREBURTReadingAge ~ Group*time | id, data = readDataSubLong)
 
 
-readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREBURTReadingAge ~ time*Group, random =~ 1 | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
+```
 
