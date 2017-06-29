@@ -1,5 +1,5 @@
 ---
-title: "RepeatedANOVA"
+title: "ExperimentalMulti"
 output: html_document
 ---
 
@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Trying a multilevel modeling approach
+Multilevel approach for GORTRateAge
 ```{r}
 setwd("~/Desktop")
 readData = read.csv("TheCrossingDataSet.csv")
@@ -49,9 +49,8 @@ head(readDataSubLong)
 readMuliModel = groupedData(PREGORTAccuracyAge ~ Group*time | id, data = readDataSubLong)
 
 
-readMuliModelResults = lme(PREGORTAccuracyAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREGORTAccuracyAge ~ time*Group, random =~ Group*time | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
-ranef(readMuliModelResults)
 ```
 GORT fluency reading age
 ```{r}
@@ -70,27 +69,67 @@ head(readDataSubLong)
 readMuliModel = groupedData(PREGORTFluencyAge ~ Group*time | id, data = readDataSubLong)
 
 
-readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random=~ 1 | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
-
 ```
-BURT reading age
+GORT comprehension reading age
 ```{r}
-readDataBURT = readData[c("id","Group", "PREBURTReadingAge", "PREBURTReadingAge")]
+readDataGORTComp = readData[c("id","Group", "PREGORTComprehensionAge", "POSTGORTComprehensionAge")]
 
-readData$PREBURTReadingAge
+readData$PREGORTComprehensionAge
 # First get into the format of the first wide transformation.
-readDataSubLong = reshape(readDataGORTFl, varying = list(c("PREGORTFluencyAge", "POSTGORTFluencyAge")), times = c(1,2), direction = "long")
+readDataSubLong = reshape(readDataGORTComp, varying = list(c("PREGORTComprehensionAge", "POSTGORTComprehensionAge")), times = c(1,2), direction = "long")
 
 library(nlme)
 readDataSubLong$Group = factor(readDataSubLong$Group)
 readDataSubLong$time = factor(readDataSubLong$time)
 readDataSubLong$id = factor(readDataSubLong$id)
-head(readDataSubLong)
 
-readMuliModel = groupedData(PREGORTFluencyAge ~ Group*time | id, data = readDataSubLong)
+readMuliModel = groupedData(PREGORTComprehensionAge ~ Group*time | id, data = readDataSubLong)
+dim(readMuliModel)
 
-
-readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREGORTComprehensionAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
+```
+
+BURT reading age
+```{r}
+readDataBURT = readData[c("id","Group", "PREBURTReadingAge", "POSTBURTReadingAge")]
+
+readData$PREBURTReadingAge
+# First get into the format of the first wide transformation.
+readDataSubLong = reshape(readDataBURT, varying = list(c("PREBURTReadingAge", "POSTBURTReadingAge")), times = c(1,2), direction = "long")
+
+library(nlme)
+readDataSubLong$Group = factor(readDataSubLong$Group)
+readDataSubLong$time = factor(readDataSubLong$time)
+readDataSubLong$id = factor(readDataSubLong$id)
+
+readMuliModel = groupedData(PREBURTReadingAge ~ Group*time | id, data = readDataSubLong)
+dim(readMuliModel)
+
+readMuliModelResults = lme(PREBURTReadingAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+summary(readMuliModelResults)
+
+```
+I believe I am using an unstructred covariance matrix so there are no assumptions about shperiticy, we can unbalanced designs.  With a random slopes model, we do not make any assumptions about the individual across time.  
+
+RCBM Scores
+```{r}
+readDataRCBM = readData[c("id","Group", "PREWRCPMAverage", "POSTWRCPMAverage")]
+
+readData$PREWRCPMAverage
+# First get into the format of the first wide transformation.
+readDataSubLong = reshape(readDataRCBM, varying = list(c("PREWRCPMAverage", "POSTWRCPMAverage")), times = c(1,2), direction = "long")
+
+library(nlme)
+readDataSubLong$Group = factor(readDataSubLong$Group)
+readDataSubLong$time = factor(readDataSubLong$time)
+readDataSubLong$id = factor(readDataSubLong$id)
+
+readMuliModel = groupedData(PREWRCPMAverage ~ Group*time | id, data = readDataSubLong)
+
+readMuliModelResults = lme(PREWRCPMAverage ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+summary(readMuliModelResults)
+```
 
