@@ -31,14 +31,14 @@ readMuliModel = groupedData(PREGORTRateAge ~ Group*time | id, data = readDataSub
 readMuliModelResults = lme(PREGORTRateAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
 
-sd1 = 3
-sd2 = 2.6
+sd1 = 2.9
+sd2 = 3.3
 n1 = 17
 n2 = 14
-m1 = (14.4-13.2)
-m2 = (13.1-12.5)
+m1 = (15.9-13.7)
+m2 = (14.4-13.6)
 
-poolSD = sqrt(sd1^2*(n1-1) +sd2^2*(n2-1)/((n1-1)+(n2-1))) 
+poolSD = sqrt((sd1^2*(n1-1) +sd2^2*(n2-1))/((n1-1)+(n2-1))) 
 efSize = (m1-m2)/poolSD
 efSize
 ```
@@ -68,8 +68,7 @@ n1 = 17
 n2 = 14
 m1 = (17.1-14.4)
 m2 = (15.1-14.6)
-
-poolSD = sqrt(sd1^2*(n1-1) +sd2^2*(n2-1)/((n1-1)+(n2-1))) 
+poolSD = sqrt((sd1^2*(n1-1) + sd2^2*(n2-1))/((n1-1)+(n2-1))) 
 efSize = (m1-m2)/poolSD
 efSize
 
@@ -101,7 +100,7 @@ n2 = 14
 m1 = (15.9-13.7)
 m2 = (14.4-13.6)
 
-poolSD = sqrt(sd1^2*(n1-1) +sd2^2*(n2-1)/((n1-1)+(n2-1))) 
+poolSD = sqrt((sd1^2*(n1-1) +sd2^2*(n2-1))/((n1-1)+(n2-1))) 
 efSize = (m1-m2)/poolSD
 efSize
 ```
