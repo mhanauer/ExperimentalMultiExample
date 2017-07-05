@@ -20,7 +20,6 @@ readDataSub = readData[c("id","Group", "PREGORTRateAge", "POSTGORTRateAge")]
 
 readDataGORTAc = readData[c("id","Group", "PREGORTAccuracyAge", "POSTGORTAccuracyAge")]
 
-# First get into the format of the first wide transformation.
 readDataSubLong = reshape(readDataSub, varying = list(c("PREGORTRateAge", "POSTGORTRateAge")), times = c(1,2), direction = "long")
 
 library(nlme)
@@ -108,8 +107,7 @@ GORT comprehension reading age
 ```{r}
 readDataGORTComp = readData[c("id","Group", "PREGORTComprehensionAge", "POSTGORTComprehensionAge")]
 
-readData$PREGORTComprehensionAge
-# First get into the format of the first wide transformation.
+
 readDataSubLong = reshape(readDataGORTComp, varying = list(c("PREGORTComprehensionAge", "POSTGORTComprehensionAge")), times = c(1,2), direction = "long")
 
 library(nlme)
@@ -161,7 +159,7 @@ RCBM Scores
 readDataRCBM = readData[c("id","Group", "PREWRCPMAverage", "POSTWRCPMAverage")]
 
 readData$PREWRCPMAverage
-# First get into the format of the first wide transformation.
+
 readDataSubLong = reshape(readDataRCBM, varying = list(c("PREWRCPMAverage", "POSTWRCPMAverage")), times = c(1,2), direction = "long")
 
 library(nlme)
