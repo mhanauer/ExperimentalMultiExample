@@ -30,16 +30,7 @@ readMuliModel = groupedData(PREGORTRateAge ~ Group*time | id, data = readDataSub
 readMuliModelResults = lme(PREGORTRateAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
 
-sd1 = 2.9
-sd2 = 3.3
-n1 = 17
-n2 = 14
-m1 = (15.9-13.7)
-m2 = (14.4-13.6)
 
-poolSD = sqrt((sd1^2*(n1-1) +sd2^2*(n2-1))/((n1-1)+(n2-1))) 
-efSize = (m1-m2)/poolSD
-efSize
 ```
 
 GORT accuracy reading age
@@ -61,8 +52,10 @@ readMuliModel = groupedData(PREGORTAccuracyAge ~ Group*time | id, data = readDat
 readMuliModelResults = lme(PREGORTAccuracyAge ~ time*Group, random =~ Group*time | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
 
+
+
 sd1 = 3.5
-sd2 = 3.3
+sd2 = 2.9
 n1 = 17
 n2 = 14
 m1 = (17.1-14.4)
@@ -92,8 +85,10 @@ readMuliModel = groupedData(PREGORTFluencyAge ~ Group*time | id, data = readData
 readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random=~ 1 | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
 
-sd1 = 2.9
-sd2 = 3.3
+
+
+sd1 = 3.5
+sd2 = 2.6
 n1 = 17
 n2 = 14
 m1 = (15.9-13.7)
