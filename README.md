@@ -26,8 +26,18 @@ library(nlme)
 readDataSubLong$Group = factor(readDataSubLong$Group)
 readMuliModel = groupedData(PREGORTRateAge ~ Group*time | id, data = readDataSubLong)
 
+unconResults = lme(PREGORTRateAge ~ 1, random = ~ 1 | id, data = readMuliModel, method = "ML")
+
+randomInResults = lme(PREGORTRateAge ~ time*Group, random = ~ 1 | id, data = readMuliModel, method = "ML")
+
+summary(randomInResults)
+
+anova(unconResults, randomInResults)
 
 readMuliModelResults = lme(PREGORTRateAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+
+anova(randomInResults, readMuliModelResults)
+
 summary(readMuliModelResults)
 
 
@@ -48,11 +58,18 @@ head(readDataSubLong)
 
 readMuliModel = groupedData(PREGORTAccuracyAge ~ Group*time | id, data = readDataSubLong)
 
+unconResults = lme(PREGORTAccuracyAge ~ 1, random = ~ 1 | id, data = readMuliModel, method = "ML")
+
+randomInResults = lme(PREGORTAccuracyAge ~ time*Group, random = ~ 1 | id, data = readMuliModel, method = "ML")
+
+summary(randomInResults)
+
+anova(unconResults, randomInResults)
 
 readMuliModelResults = lme(PREGORTAccuracyAge ~ time*Group, random =~ Group*time | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
 
-
+anova(randomInResults, readMuliModelResults)
 
 sd1 = 3.5
 sd2 = 2.9
@@ -82,8 +99,19 @@ head(readDataSubLong)
 readMuliModel = groupedData(PREGORTFluencyAge ~ Group*time | id, data = readDataSubLong)
 
 
-readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random=~ 1 | id, data = readMuliModel, method = "ML")
+unconResults = lme(PREGORTFluencyAge ~ 1, random = ~ 1 | id, data = readMuliModel, method = "ML")
+
+randomInResults = lme(PREGORTFluencyAge ~ time*Group, random = ~ 1 | id, data = readMuliModel, method = "ML")
+
+summary(randomInResults)
+
+anova(unconResults, randomInResults)
+
+
+readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random=~ time*Group | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
+
+anova(readMuliModelResults, randomInResults)
 
 
 
@@ -111,7 +139,14 @@ readDataSubLong$time = factor(readDataSubLong$time)
 readDataSubLong$id = factor(readDataSubLong$id)
 
 readMuliModel = groupedData(PREGORTComprehensionAge ~ Group*time | id, data = readDataSubLong)
-dim(readMuliModel)
+
+unconResults = lme(PREGORTComprehensionAge ~ 1, random = ~ 1 | id, data = readMuliModel, method = "ML")
+
+randomInResults = lme(PREGORTComprehensionAge ~ time*Group, random = ~ 1 | id, data = readMuliModel, method = "ML")
+
+summary(randomInResults)
+
+anova(unconResults, randomInResults)
 
 readMuliModelResults = lme(PREGORTComprehensionAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
@@ -131,7 +166,16 @@ readDataSubLong$time = factor(readDataSubLong$time)
 readDataSubLong$id = factor(readDataSubLong$id)
 
 readMuliModel = groupedData(PREBURTReadingAge ~ Group*time | time/id, data = readDataSubLong)
-dim(readMuliModel)
+
+unconResults = lme(PREBURTReadingAge ~ 1, random = ~ 1 | id, data = readMuliModel, method = "ML")
+
+randomInResults = lme(PREBURTReadingAge ~ time*Group, random = ~ 1 | id, data = readMuliModel, method = "ML")
+
+summary(randomInResults)
+
+anova(unconResults, randomInResults)
+
+
 
 readMuliModelResults = lme(PREBURTReadingAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
