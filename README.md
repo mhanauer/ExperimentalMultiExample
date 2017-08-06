@@ -6,6 +6,11 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+Extra resources
+#http://rpsychologist.com/r-guide-longitudinal-lme-lmer#unconditional-growth-model
+#https://datascienceplus.com/analysing-longitudinal-data-multilevel-growth-models-i/
+#https://idaejin.github.io/bcam-courses/neiker-2016/material/mixed-models/#repeated-measurements-and-longitudinal-data
+
 
 GORT rate reading age
 ```{r}
@@ -34,7 +39,7 @@ summary(randomInResults)
 
 anova(unconResults, randomInResults)
 
-readMuliModelResults = lme(PREGORTRateAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREGORTRateAge ~ time*Group, random =~ time | id, data = readMuliModel, method = "ML")
 
 anova(randomInResults, readMuliModelResults)
 
@@ -66,7 +71,7 @@ summary(randomInResults)
 
 anova(unconResults, randomInResults)
 
-readMuliModelResults = lme(PREGORTAccuracyAge ~ time*Group, random =~ Group*time | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREGORTAccuracyAge ~ time*Group, random =~ time | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
 
 anova(randomInResults, readMuliModelResults)
@@ -108,7 +113,7 @@ summary(randomInResults)
 anova(unconResults, randomInResults)
 
 
-readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random=~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREGORTFluencyAge ~ time*Group, random=~ time | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
 
 anova(readMuliModelResults, randomInResults)
@@ -148,7 +153,7 @@ summary(randomInResults)
 
 anova(unconResults, randomInResults)
 
-readMuliModelResults = lme(PREGORTComprehensionAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREGORTComprehensionAge ~ time*Group, random =~ time | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
 ```
 
@@ -177,7 +182,7 @@ anova(unconResults, randomInResults)
 
 
 
-readMuliModelResults = lme(PREBURTReadingAge ~ time*Group, random =~ time*Group | id, data = readMuliModel, method = "ML")
+readMuliModelResults = lme(PREBURTReadingAge ~ time*Group, random =~ time | id, data = readMuliModel, method = "ML")
 summary(readMuliModelResults)
 
 sd1 = 2.9
@@ -191,24 +196,3 @@ poolSD = sqrt(sd1^2*(n1-1) +sd2^2*(n2-1)/((n1-1)+(n2-1)))
 efSize = (m1-m2)/poolSD
 efSize
 ```
-I believe I am using an unstructred covariance matrix so there are no assumptions about shperiticy, we can unbalanced designs.  With a random slopes model, we do not make any assumptions about the individual across time.  
-
-RCBM Scores
-```{r}
-readDataRCBM = readData[c("id","Group", "PREWRCPMAverage", "POSTWRCPMAverage")]
-
-readData$PREWRCPMAverage
-
-readDataSubLong = reshape(readDataRCBM, varying = list(c("PREWRCPMAverage", "POSTWRCPMAverage")), times = c(1,2), direction = "long")
-
-library(nlme)
-readDataSubLong$Group = factor(readDataSubLong$Group)
-readDataSubLong$time = factor(readDataSubLong$time)
-readDataSubLong$id = factor(readDataSubLong$id)
-
-readMuliModel = groupedData(PREWRCPMAverage ~ Group*time | times/id, data = readDataSubLong)
-
-readMuliModelResults = lme(PREWRCPMAverage ~ time*Group, random =~ time*Group | time/id, data = readMuliModel, method = "ML")
-summary(readMuliModelResults)
-```
-
